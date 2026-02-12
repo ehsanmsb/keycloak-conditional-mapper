@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.ehsanmsb</groupId>
-    <artifactId>keycloak-ldap-conditional-mapper</artifactId>
+    <artifactId>keycloak-conditional-mapper</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Keycloak LDAP Conditional Mapper</name>
-    <description>Custom Keycloak LDAP conditional mapper with regex-based attribute logic for dynamic role and group assignment.</description>
+    <name>Keycloak Conditional Mapper</name>
+    <description>Custom Keycloak LDAP conditional mapper for group assignment based on LDAP attribute values.</description>
 
     <properties>
         <keycloak.version>26.4.5</keycloak.version>
