@@ -1,0 +1,127 @@
+dn: ou=company,dc=example,dc=org
+objectClass: organizationalUnit
+ou: company
+
+dn: ou=groups,dc=example,dc=org
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=user01,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 01
+sn: User01
+uid: user01
+mail: user01@example.org
+userPassword: pass01
+departmentNumber: engineering
+
+dn: uid=user02,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 02
+sn: User02
+uid: user02
+mail: user02@example.org
+userPassword: pass02
+departmentNumber: engineering
+
+dn: uid=user03,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 03
+sn: User03
+uid: user03
+mail: user03@example.org
+userPassword: pass03
+departmentNumber: sales
+
+dn: uid=user04,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 04
+sn: User04
+uid: user04
+mail: user04@example.org
+userPassword: pass04
+departmentNumber: sales
+
+dn: uid=user05,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 05
+sn: User05
+uid: user05
+mail: user05@example.org
+userPassword: pass05
+departmentNumber: hr
+
+dn: uid=user06,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 06
+sn: User06
+uid: user06
+mail: user06@example.org
+userPassword: pass06
+departmentNumber: hr
+
+dn: uid=user07,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 07
+sn: User07
+uid: user07
+mail: user07@example.org
+userPassword: pass07
+departmentNumber: finance
+
+dn: uid=user08,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 08
+sn: User08
+uid: user08
+mail: user08@example.org
+userPassword: pass08
+departmentNumber: finance
+
+dn: uid=user09,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 09
+sn: User09
+uid: user09
+mail: user09@example.org
+userPassword: pass09
+departmentNumber: support
+
+dn: uid=user10,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 10
+sn: User10
+uid: user10
+mail: user10@example.org
+userPassword: pass10
+departmentNumber: support
