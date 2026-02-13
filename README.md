@@ -40,4 +40,4 @@ In your LDAP user federation provider, add this mapper and set:
 
 ## Provider ID
 
-`ldap-conditional-group-mapper`
+`keycloak-conditional-mapper`

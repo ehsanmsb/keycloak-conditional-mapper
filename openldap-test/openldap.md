@@ -68,7 +68,7 @@ Then click `Synchronize all users`.
 
 ## 5. Configure this conditional mapper plugin
 
-Add mapper `ldap-conditional-group-mapper` and set:
+Add mapper `keycloak-conditional-mapper` and set:
 
 - `LDAP Attribute`: `departmentNumber`
 - `Expected Attribute Value`: for example `engineering`

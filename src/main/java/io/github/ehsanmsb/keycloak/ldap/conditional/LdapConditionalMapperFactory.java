@@ -11,7 +11,7 @@ import org.keycloak.storage.ldap.mappers.AbstractLDAPStorageMapperFactory;
 
 public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFactory {
 
-    public static final String PROVIDER_ID = "ldap-conditional-group-mapper";
+    public static final String PROVIDER_ID = "keycloak-conditional-mapper";
     public static final String LDAP_ATTRIBUTE = "ldap.attribute";
     public static final String EXPECTED_VALUE = "ldap.expected.value";
     public static final String GROUP_PATH = "keycloak.group.path";
