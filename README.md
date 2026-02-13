@@ -1,13 +1,14 @@
 # keycloak-conditional-mapper
 
-Custom Keycloak LDAP mapper that adds imported LDAP users to a Keycloak group when a configured LDAP attribute matches a configured value.
+Custom Keycloak LDAP mapper that adds imported LDAP users to a Keycloak group when email regex and LDAP attribute conditions match.
 
 ## What it does
 
 - Runs during LDAP user import/sync (`onImportUserFromLDAP`).
+- Checks email first using a configured LDAP/AD email attribute key and regex.
 - Reads one LDAP attribute from the imported LDAP user.
 - Compares it with an expected value (case-sensitive or case-insensitive).
-- Adds the user to the configured Keycloak group path if it matches.
+- Adds the user to the configured Keycloak group path only if both checks match.
 
 ## Build
 
@@ -33,6 +34,8 @@ The output jar is created at:
 
 In your LDAP user federation provider, add this mapper and set:
 
+- `Email Attribute Key`: email attribute key (example: `mail` or `userPrincipalName`).
+- `Email Regex`: regex to filter users by email (example: `.*@gmail\.com`).
 - `LDAP Attribute`: LDAP attribute to evaluate (example: `department`).
 - `Expected Attribute Value`: value to match (example: `engineering`).
 - `Keycloak Group Path`: target group path (example: `/employees/engineering`).

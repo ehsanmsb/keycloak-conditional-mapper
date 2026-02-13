@@ -1,5 +1,7 @@
 package io.github.ehsanmsb.keycloak.ldap.conditional;
 
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.GroupModel;
@@ -22,11 +24,18 @@ public class LdapConditionalMapper extends AbstractLDAPStorageMapper {
 
     @Override
     public void onImportUserFromLDAP(LDAPObject ldapUser, UserModel user, RealmModel realm, boolean isCreate) {
+        String emailAttribute = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EMAIL_ATTRIBUTE);
+        String emailRegex = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EMAIL_REGEX);
         String ldapAttribute = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.LDAP_ATTRIBUTE);
         String expectedValue = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EXPECTED_VALUE);
         String groupPath = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.GROUP_PATH);
 
-        if (isBlank(ldapAttribute) || isBlank(expectedValue) || isBlank(groupPath)) {
+        if (isBlank(emailAttribute) || isBlank(emailRegex) || isBlank(ldapAttribute) || isBlank(expectedValue) || isBlank(groupPath)) {
+            return;
+        }
+
+        String emailValue = ldapUser.getAttributeAsString(emailAttribute);
+        if (!isRegexMatch(emailValue, emailRegex, user.getUsername())) {
             return;
         }
 
@@ -78,6 +87,22 @@ public class LdapConditionalMapper extends AbstractLDAPStorageMapper {
         return ignoreCase
             ? attributeValue.equalsIgnoreCase(expectedValue)
             : attributeValue.equals(expectedValue);
+    }
+
+    private boolean isRegexMatch(String value, String regex, String username) {
+        if (value == null) {
+            return false;
+        }
+
+        try {
+            return Pattern.compile(regex).matcher(value).matches();
+        } catch (PatternSyntaxException ex) {
+            LOG.warnf(
+                "Invalid email regex '%s' for mapper '%s'. User '%s' skipped.",
+                regex, mapperModel.getName(), username
+            );
+            return false;
+        }
     }
 
     private boolean isBlank(String value) {

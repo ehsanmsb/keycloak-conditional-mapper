@@ -12,6 +12,8 @@ import org.keycloak.storage.ldap.mappers.AbstractLDAPStorageMapperFactory;
 public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFactory {
 
     public static final String PROVIDER_ID = "keycloak-conditional-mapper";
+    public static final String EMAIL_ATTRIBUTE = "ldap.email.attribute";
+    public static final String EMAIL_REGEX = "ldap.email.regex";
     public static final String LDAP_ATTRIBUTE = "ldap.attribute";
     public static final String EXPECTED_VALUE = "ldap.expected.value";
     public static final String GROUP_PATH = "keycloak.group.path";
@@ -21,6 +23,21 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
 
     static {
         List<ProviderConfigProperty> properties = new ArrayList<>();
+
+        ProviderConfigProperty emailAttribute = new ProviderConfigProperty();
+        emailAttribute.setName(EMAIL_ATTRIBUTE);
+        emailAttribute.setLabel("Email Attribute Key");
+        emailAttribute.setType(ProviderConfigProperty.STRING_TYPE);
+        emailAttribute.setDefaultValue("mail");
+        emailAttribute.setHelpText("LDAP/AD attribute key used for email matching (for example: mail or userPrincipalName).");
+        properties.add(emailAttribute);
+
+        ProviderConfigProperty emailRegex = new ProviderConfigProperty();
+        emailRegex.setName(EMAIL_REGEX);
+        emailRegex.setLabel("Email Regex");
+        emailRegex.setType(ProviderConfigProperty.STRING_TYPE);
+        emailRegex.setHelpText("Only users whose email attribute matches this regex are processed (for example: .*@gmail\\.com).");
+        properties.add(emailRegex);
 
         ProviderConfigProperty ldapAttribute = new ProviderConfigProperty();
         ldapAttribute.setName(LDAP_ATTRIBUTE);
@@ -61,7 +78,7 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
 
     @Override
     public String getHelpText() {
-        return "Adds imported LDAP users to a Keycloak group if an LDAP attribute matches a configured value.";
+        return "Adds imported LDAP users to a Keycloak group if email regex and LDAP attribute conditions match.";
     }
 
     @Override
