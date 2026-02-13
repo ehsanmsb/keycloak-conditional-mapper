@@ -1,6 +1,6 @@
 # OpenLDAP Test Setup
 
-This guide creates a local OpenLDAP container, imports 10 test users from `users.ldif`, and configures Keycloak LDAP federation for this project.
+This guide creates a local OpenLDAP container, imports test users from `users.ldif`, and configures Keycloak LDAP federation for this project.
 
 ## 1. Run OpenLDAP
 
@@ -20,7 +20,7 @@ The LDIF creates:
 
 - `ou=company,dc=example,dc=org`
 - `ou=groups,dc=example,dc=org`
-- 10 users under `ou=company` with `departmentNumber` attribute.
+- users under `ou=company` with `departmentNumber` attribute.
 
 ```bash
 docker cp openldap-test/users.ldif openldap:/tmp/users.ldif
@@ -40,7 +40,7 @@ docker exec -it openldap ldapsearch -x \
   "(objectClass=inetOrgPerson)" uid departmentNumber
 ```
 
-You should see `uid=user01` through `uid=user10` with their `departmentNumber` values.
+You should see all users from the LDIF with their `departmentNumber` values.
 
 ## 4. Configure LDAP federation in Keycloak
 
@@ -76,3 +76,49 @@ Add mapper `keycloak-conditional-mapper` and set:
 - `Case-Insensitive Match`: `true`
 
 When synchronization runs, users with matching `departmentNumber` are added to the configured group.
+
+## 6. Troubleshooting: `Already exists (68)` on `ldapadd`
+
+If you run import multiple times, you may see:
+
+```text
+adding new entry "ou=company,dc=example,dc=org"
+
+adding new entry "ou=groups,dc=example,dc=org"
+ldap_add: Already exists (68)
+```
+
+This means one or more entries in the LDIF already exist in LDAP.
+
+### Solution A: full reset (recommended for tests)
+
+```bash
+docker exec -it openldap ldapdelete -x \
+  -D "cn=admin,dc=example,dc=org" -w admin \
+  -r "ou=company,dc=example,dc=org"
+
+docker exec -it openldap ldapdelete -x \
+  -D "cn=admin,dc=example,dc=org" -w admin \
+  -r "ou=groups,dc=example,dc=org"
+```
+
+Then import again:
+
+```bash
+docker cp openldap-test/users.ldif openldap:/tmp/users.ldif
+docker exec -it openldap ldapadd -x \
+  -D "cn=admin,dc=example,dc=org" -w admin \
+  -f /tmp/users.ldif
+```
+
+### Solution B: delete only user entries
+
+List existing users:
+
+```bash
+docker exec -it openldap ldapsearch -LLL -x \
+  -D "cn=admin,dc=example,dc=org" -w admin \
+  -b "ou=company,dc=example,dc=org" "(uid=*)" dn
+```
+
+Delete returned user DNs with `ldapdelete`, then run `ldapadd` again.

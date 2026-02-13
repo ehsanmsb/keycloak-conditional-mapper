@@ -14,7 +14,7 @@ objectClass: top
 cn: User 01
 sn: User01
 uid: user01
-mail: user01@example.org
+mail: user01@gmail.com
 userPassword: pass01
 departmentNumber: engineering
 
@@ -26,7 +26,7 @@ objectClass: top
 cn: User 02
 sn: User02
 uid: user02
-mail: user02@example.org
+mail: user02@gmail.com
 userPassword: pass02
 departmentNumber: engineering
 
@@ -38,7 +38,7 @@ objectClass: top
 cn: User 03
 sn: User03
 uid: user03
-mail: user03@example.org
+mail: user03@yahoo.com
 userPassword: pass03
 departmentNumber: sales
 
@@ -50,7 +50,7 @@ objectClass: top
 cn: User 04
 sn: User04
 uid: user04
-mail: user04@example.org
+mail: user04@gmail.com
 userPassword: pass04
 departmentNumber: sales
 
@@ -62,7 +62,7 @@ objectClass: top
 cn: User 05
 sn: User05
 uid: user05
-mail: user05@example.org
+mail: user05@outlook.com
 userPassword: pass05
 departmentNumber: hr
 
@@ -74,7 +74,7 @@ objectClass: top
 cn: User 06
 sn: User06
 uid: user06
-mail: user06@example.org
+mail: user06@gmail.com
 userPassword: pass06
 departmentNumber: hr
 
@@ -86,7 +86,7 @@ objectClass: top
 cn: User 07
 sn: User07
 uid: user07
-mail: user07@example.org
+mail: user07@company.local
 userPassword: pass07
 departmentNumber: finance
 
@@ -98,7 +98,7 @@ objectClass: top
 cn: User 08
 sn: User08
 uid: user08
-mail: user08@example.org
+mail: user08@gmail.com
 userPassword: pass08
 departmentNumber: finance
 
@@ -122,6 +122,66 @@ objectClass: top
 cn: User 10
 sn: User10
 uid: user10
-mail: user10@example.org
+mail: user10@gmail.com
 userPassword: pass10
+departmentNumber: support
+
+dn: uid=user11,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 11
+sn: User11
+uid: user11
+mail: user11@gmail.com
+userPassword: pass11
+departmentNumber: engineering
+
+dn: uid=user12,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 12
+sn: User12
+uid: user12
+mail: user12@proton.me
+userPassword: pass12
+departmentNumber: engineering
+
+dn: uid=user13,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 13
+sn: User13
+uid: user13
+mail: user13@gmail.com
+userPassword: pass13
+departmentNumber: sales
+
+dn: uid=user14,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 14
+sn: User14
+uid: user14
+mail: user14@example.org
+userPassword: pass14
+departmentNumber: hr
+
+dn: uid=user15,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 15
+sn: User15
+uid: user15
+mail: user15@gmail.com
+userPassword: pass15
 departmentNumber: support
