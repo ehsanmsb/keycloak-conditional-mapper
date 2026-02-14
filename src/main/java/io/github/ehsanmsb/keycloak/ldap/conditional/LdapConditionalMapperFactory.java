@@ -14,8 +14,7 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
     public static final String PROVIDER_ID = "keycloak-conditional-mapper";
     public static final String EMAIL_ATTRIBUTE = "ldap.email.attribute";
     public static final String EMAIL_REGEX = "ldap.email.regex";
-    public static final String LDAP_ATTRIBUTE = "ldap.attribute";
-    public static final String EXPECTED_VALUE = "ldap.expected.value";
+    public static final String LDAP_ATTRIBUTES_REGEX = "ldap.attributes.regex";
     public static final String GROUP_PATH = "keycloak.group.path";
     public static final String IGNORE_CASE = "match.ignore.case";
 
@@ -39,19 +38,16 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
         emailRegex.setHelpText("Only users whose email attribute matches this regex are processed (for example: .*@gmail\\.com).");
         properties.add(emailRegex);
 
-        ProviderConfigProperty ldapAttribute = new ProviderConfigProperty();
-        ldapAttribute.setName(LDAP_ATTRIBUTE);
-        ldapAttribute.setLabel("LDAP Attribute");
-        ldapAttribute.setType(ProviderConfigProperty.STRING_TYPE);
-        ldapAttribute.setHelpText("LDAP user attribute that will be evaluated during LDAP import/sync.");
-        properties.add(ldapAttribute);
-
-        ProviderConfigProperty expectedValue = new ProviderConfigProperty();
-        expectedValue.setName(EXPECTED_VALUE);
-        expectedValue.setLabel("Expected Attribute Value");
-        expectedValue.setType(ProviderConfigProperty.STRING_TYPE);
-        expectedValue.setHelpText("If LDAP attribute equals this value, user is added to the configured group.");
-        properties.add(expectedValue);
+        ProviderConfigProperty ldapAttributesRegex = new ProviderConfigProperty();
+        ldapAttributesRegex.setName(LDAP_ATTRIBUTES_REGEX);
+        ldapAttributesRegex.setLabel("LDAP Attributes Regex");
+        ldapAttributesRegex.setType(ProviderConfigProperty.STRING_TYPE);
+        ldapAttributesRegex.setHelpText(
+            "Regex evaluated against normalized LDAP attributes in 'attribute=value' lines. "
+                + "Use OR with '|' and AND with lookaheads, for example: "
+                + "(?s)(?=.*departmentNumber=engineering)(?=.*title=senior).*"
+        );
+        properties.add(ldapAttributesRegex);
 
         ProviderConfigProperty groupPath = new ProviderConfigProperty();
         groupPath.setName(GROUP_PATH);
@@ -65,7 +61,7 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
         ignoreCase.setLabel("Case-Insensitive Match");
         ignoreCase.setType(ProviderConfigProperty.BOOLEAN_TYPE);
         ignoreCase.setDefaultValue("true");
-        ignoreCase.setHelpText("When enabled, attribute value matching ignores case.");
+        ignoreCase.setHelpText("When enabled, both email regex and LDAP attributes regex matching ignore case.");
         properties.add(ignoreCase);
 
         CONFIG_PROPERTIES = Collections.unmodifiableList(properties);
@@ -78,7 +74,7 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
 
     @Override
     public String getHelpText() {
-        return "Adds imported LDAP users to a Keycloak group if email regex and LDAP attribute conditions match.";
+        return "Adds imported LDAP users to a Keycloak group if email regex and LDAP attributes regex match.";
     }
 
     @Override

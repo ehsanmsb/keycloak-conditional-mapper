@@ -1,7 +1,5 @@
 package io.github.ehsanmsb.keycloak.ldap.conditional;
 
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.GroupModel;
@@ -26,21 +24,22 @@ public class LdapConditionalMapper extends AbstractLDAPStorageMapper {
     public void onImportUserFromLDAP(LDAPObject ldapUser, UserModel user, RealmModel realm, boolean isCreate) {
         String emailAttribute = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EMAIL_ATTRIBUTE);
         String emailRegex = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EMAIL_REGEX);
-        String ldapAttribute = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.LDAP_ATTRIBUTE);
-        String expectedValue = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EXPECTED_VALUE);
+        String ldapAttributesRegex = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.LDAP_ATTRIBUTES_REGEX);
         String groupPath = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.GROUP_PATH);
+        boolean ignoreCase = Boolean.parseBoolean(
+            mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.IGNORE_CASE)
+        );
 
-        if (isBlank(emailAttribute) || isBlank(emailRegex) || isBlank(ldapAttribute) || isBlank(expectedValue) || isBlank(groupPath)) {
+        if (isBlank(emailAttribute) || isBlank(emailRegex) || isBlank(ldapAttributesRegex) || isBlank(groupPath)) {
             return;
         }
 
         String emailValue = ldapUser.getAttributeAsString(emailAttribute);
-        if (!isRegexMatch(emailValue, emailRegex, user.getUsername())) {
+        if (!isRegexMatch(emailValue, emailRegex, ignoreCase, user.getUsername())) {
             return;
         }
 
-        String attributeValue = ldapUser.getAttributeAsString(ldapAttribute);
-        if (!isMatch(attributeValue, expectedValue)) {
+        if (!ExpressionEvaluator.isRegexMatch(ldapUser, ldapAttributesRegex, ignoreCase, LOG, mapperModel.getName(), user.getUsername())) {
             return;
         }
 
@@ -55,8 +54,8 @@ public class LdapConditionalMapper extends AbstractLDAPStorageMapper {
         if (!user.isMemberOf(targetGroup)) {
             user.joinGroup(targetGroup);
             LOG.debugf(
-                "Added user '%s' to group '%s' based on LDAP attribute '%s' value '%s'",
-                user.getUsername(), groupPath, ldapAttribute, attributeValue
+                "Added user '%s' to group '%s' based on LDAP attributes regex '%s'",
+                user.getUsername(), groupPath, ldapAttributesRegex
             );
         }
     }
@@ -76,27 +75,14 @@ public class LdapConditionalMapper extends AbstractLDAPStorageMapper {
         return delegate;
     }
 
-    private boolean isMatch(String attributeValue, String expectedValue) {
-        if (attributeValue == null) {
-            return false;
-        }
-
-        boolean ignoreCase = Boolean.parseBoolean(
-            mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.IGNORE_CASE)
-        );
-        return ignoreCase
-            ? attributeValue.equalsIgnoreCase(expectedValue)
-            : attributeValue.equals(expectedValue);
-    }
-
-    private boolean isRegexMatch(String value, String regex, String username) {
+    private boolean isRegexMatch(String value, String regex, boolean ignoreCase, String username) {
         if (value == null) {
             return false;
         }
 
         try {
-            return Pattern.compile(regex).matcher(value).matches();
-        } catch (PatternSyntaxException ex) {
+            return ExpressionEvaluator.compilePattern(regex, ignoreCase).matcher(value).matches();
+        } catch (IllegalArgumentException ex) {
             LOG.warnf(
                 "Invalid email regex '%s' for mapper '%s'. User '%s' skipped.",
                 regex, mapperModel.getName(), username

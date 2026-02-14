@@ -70,12 +70,11 @@ Then click `Synchronize all users`.
 
 Add mapper `keycloak-conditional-mapper` and set:
 
-- `LDAP Attribute`: `departmentNumber`
-- `Expected Attribute Value`: for example `engineering`
+- `LDAP Attributes Regex`: for example `departmentNumber=engineering`
 - `Keycloak Group Path`: for example `/engineering`
 - `Case-Insensitive Match`: `true`
 
-When synchronization runs, users with matching `departmentNumber` are added to the configured group.
+When synchronization runs, users whose LDAP attribute payload matches the regex are added to the configured group.
 
 ## 6. Troubleshooting: `Already exists (68)` on `ldapadd`
 

@@ -1,13 +1,13 @@
 # keycloak-conditional-mapper
 
-Custom Keycloak LDAP mapper that adds imported LDAP users to a Keycloak group when email regex and LDAP attribute conditions match.
+Custom Keycloak LDAP mapper that adds imported LDAP users to a Keycloak group when email regex and LDAP attributes regex match.
 
 ## What it does
 
 - Runs during LDAP user import/sync (`onImportUserFromLDAP`).
 - Checks email first using a configured LDAP/AD email attribute key and regex.
-- Reads one LDAP attribute from the imported LDAP user.
-- Compares it with an expected value (case-sensitive or case-insensitive).
+- Builds a normalized payload of LDAP attributes in `attribute=value` lines.
+- Evaluates one regex against that payload (case-sensitive or case-insensitive).
 - Adds the user to the configured Keycloak group path only if both checks match.
 
 ## Build
@@ -36,10 +36,18 @@ In your LDAP user federation provider, add this mapper and set:
 
 - `Email Attribute Key`: email attribute key (example: `mail` or `userPrincipalName`).
 - `Email Regex`: regex to filter users by email (example: `.*@gmail\.com`).
-- `LDAP Attribute`: LDAP attribute to evaluate (example: `department`).
-- `Expected Attribute Value`: value to match (example: `engineering`).
+- `LDAP Attributes Regex`: regex evaluated against all LDAP attributes in `attribute=value` lines.
 - `Keycloak Group Path`: target group path (example: `/employees/engineering`).
 - `Case-Insensitive Match`: `true` or `false`.
+
+### LDAP attributes regex examples
+
+- OR:
+  - `departmentNumber=engineering|departmentNumber=marketing`
+- AND:
+  - `(?s)(?=.*departmentNumber=engineering)(?=.*title=senior).*`
+- AND with OR:
+  - `(?s)(?=.*(departmentNumber=engineering|departmentNumber=platform))(?=.*title=senior).*`
 
 ## Provider ID
 
