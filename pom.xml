@@ -11,6 +11,13 @@
 
     <name>Keycloak Conditional Mapper</name>
     <description>Custom Keycloak LDAP conditional mapper for group assignment based on LDAP attribute values.</description>
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <keycloak.version>26.4.5</keycloak.version>
