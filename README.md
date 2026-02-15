@@ -7,6 +7,12 @@
 
 Custom Keycloak LDAP mapper that adds imported LDAP users to a Keycloak group when email regex and LDAP attributes regex match.
 
+## Version compatibility
+
+| Mapper Version | Supported Keycloak Version | Status |
+| --- | --- | --- |
+| `v1.0.0` | `26.4.5` | Supported |
+
 ## What it does
 
 - Runs during LDAP user import/sync (`onImportUserFromLDAP`).
@@ -23,7 +29,7 @@ mvn clean package
 
 The output jar is created at:
 
-`target/keycloak-conditional-mapper-0.1.0-SNAPSHOT.jar`
+`target/keycloak-conditional-mapper-<semantic-version>.jar`
 
 ## Install in Keycloak
 
