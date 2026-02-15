@@ -1,5 +1,10 @@
 # keycloak-conditional-mapper
 
+![License](https://img.shields.io/github/license/ehsanmsb/keycloak-ldap-conditional-mapper)
+![Test](https://github.com/ehsanmsb/keycloak-ldap-conditional-mapper/actions/workflows/checks.yaml/badge.svg?branch=main)
+![Release](https://github.com/ehsanmsb/keycloak-ldap-conditional-mapper/actions/workflows/build-release.yaml/badge.svg)
+![Tag](https://img.shields.io/github/v/tag/ehsanmsb/keycloak-ldap-conditional-mapper?&logo=git)
+
 Custom Keycloak LDAP mapper that adds imported LDAP users to a Keycloak group when email regex and LDAP attributes regex match.
 
 ## What it does
@@ -40,14 +45,10 @@ In your LDAP user federation provider, add this mapper and set:
 - `Keycloak Group Path`: target group path (example: `/employees/engineering`).
 - `Case-Insensitive Match`: `true` or `false`.
 
-### LDAP attributes regex examples
+## Wiki
 
-- OR:
-  - `departmentNumber=engineering|departmentNumber=marketing`
-- AND:
-  - `(?s)(?=.*departmentNumber=engineering)(?=.*title=senior).*`
-- AND with OR:
-  - `(?s)(?=.*(departmentNumber=engineering|departmentNumber=platform))(?=.*title=senior).*`
+- [LDAP Attributes Regex Guide](docs/wiki/LDAP-Attributes-Regex.md)
+- [OpenLDAP Test Setup](docs/wiki/OpenLDAP-Test-Setup.md)
 
 ## Provider ID
 

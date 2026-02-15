@@ -1,6 +1,6 @@
 # OpenLDAP Test Setup
 
-This guide creates a local OpenLDAP container, imports test users from `users.ldif`, and configures Keycloak LDAP federation for this project.
+This guide creates a local OpenLDAP container, imports test users from `docs/wiki/users.ldif`, and configures Keycloak LDAP federation for this project.
 
 ## 1. Run OpenLDAP
 
@@ -23,7 +23,7 @@ The LDIF creates:
 - users under `ou=company` with `departmentNumber` attribute.
 
 ```bash
-docker cp openldap-test/users.ldif openldap:/tmp/users.ldif
+docker cp docs/wiki/users.ldif openldap:/tmp/users.ldif
 docker exec -it openldap ldapadd -x \
   -D "cn=admin,dc=example,dc=org" \
   -w admin \
@@ -104,7 +104,7 @@ docker exec -it openldap ldapdelete -x \
 Then import again:
 
 ```bash
-docker cp openldap-test/users.ldif openldap:/tmp/users.ldif
+docker cp docs/wiki/users.ldif openldap:/tmp/users.ldif
 docker exec -it openldap ldapadd -x \
   -D "cn=admin,dc=example,dc=org" -w admin \
   -f /tmp/users.ldif
