@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -25,12 +24,30 @@ jobs:
           java-version: "21"
           cache: maven
 
+      - name: Derive version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "jar=target/keycloak-conditional-mapper-${VERSION}.jar" >> "$GITHUB_OUTPUT"
+
+      - name: Set Maven version from tag
+        run: mvn -B -ntp versions:set -DnewVersion=${{ steps.version.outputs.version }} -DgenerateBackupPoms=false
+
       - name: Build with Maven
         run: mvn -B -ntp clean package
+
+      - name: Verify built JAR name
+        run: test -f "${{ steps.version.outputs.jar }}"
 
       - name: Create GitHub release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: target/*.jar
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+          files: ${{ steps.version.outputs.jar }}
           generate_release_notes: true
