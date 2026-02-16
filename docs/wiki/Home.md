@@ -37,6 +37,7 @@ bin/kc.sh start
 - `LDAP Attributes Regex`
 - `Keycloak Group Path`
 - `Case-Insensitive Match`
+- `Skip Disabled Users` (default `true`)
 
 ## Wiki pages
 
