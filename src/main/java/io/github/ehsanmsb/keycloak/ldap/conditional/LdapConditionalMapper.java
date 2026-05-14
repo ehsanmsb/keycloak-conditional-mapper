@@ -22,6 +22,12 @@ public class LdapConditionalMapper extends AbstractLDAPStorageMapper {
 
     @Override
     public void onImportUserFromLDAP(LDAPObject ldapUser, UserModel user, RealmModel realm, boolean isCreate) {
+        boolean skipDisabledUsers = getBooleanConfig(LdapConditionalMapperFactory.SKIP_DISABLED_USERS, true);
+        if (skipDisabledUsers && !user.isEnabled()) {
+            LOG.debugf("User '%s' is disabled. Skipping conditional group sync.", user.getUsername());
+            return;
+        }
+
         String emailAttribute = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EMAIL_ATTRIBUTE);
         String emailRegex = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.EMAIL_REGEX);
         String ldapAttributesRegex = mapperModel.getConfig().getFirst(LdapConditionalMapperFactory.LDAP_ATTRIBUTES_REGEX);
@@ -93,5 +99,13 @@ public class LdapConditionalMapper extends AbstractLDAPStorageMapper {
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
+    }
+
+    private boolean getBooleanConfig(String key, boolean defaultValue) {
+        String rawValue = mapperModel.getConfig().getFirst(key);
+        if (rawValue == null || rawValue.trim().isEmpty()) {
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(rawValue);
     }
 }

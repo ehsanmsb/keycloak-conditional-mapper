@@ -17,6 +17,7 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
     public static final String LDAP_ATTRIBUTES_REGEX = "ldap.attributes.regex";
     public static final String GROUP_PATH = "keycloak.group.path";
     public static final String IGNORE_CASE = "match.ignore.case";
+    public static final String SKIP_DISABLED_USERS = "skip.disabled.users";
 
     private static final List<ProviderConfigProperty> CONFIG_PROPERTIES;
 
@@ -63,6 +64,16 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
         ignoreCase.setDefaultValue("true");
         ignoreCase.setHelpText("When enabled, both email regex and LDAP attributes regex matching ignore case.");
         properties.add(ignoreCase);
+
+        ProviderConfigProperty skipDisabledUsers = new ProviderConfigProperty();
+        skipDisabledUsers.setName(SKIP_DISABLED_USERS);
+        skipDisabledUsers.setLabel("Skip Disabled Users");
+        skipDisabledUsers.setType(ProviderConfigProperty.BOOLEAN_TYPE);
+        skipDisabledUsers.setDefaultValue("true");
+        skipDisabledUsers.setHelpText(
+            "When enabled, disabled users are skipped and are not synced to the configured group."
+        );
+        properties.add(skipDisabledUsers);
 
         CONFIG_PROPERTIES = Collections.unmodifiableList(properties);
     }

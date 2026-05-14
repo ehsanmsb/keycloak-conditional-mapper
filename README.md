@@ -16,6 +16,7 @@ Custom Keycloak LDAP mapper that adds imported LDAP users to a Keycloak group wh
 ## What it does
 
 - Runs during LDAP user import/sync (`onImportUserFromLDAP`).
+- Can skip disabled users (configurable with `Skip Disabled Users`, default `true`).
 - Checks email first using a configured LDAP/AD email attribute key and regex.
 - Builds a normalized payload of LDAP attributes in `attribute=value` lines.
 - Evaluates one regex against that payload (case-sensitive or case-insensitive).
@@ -50,6 +51,7 @@ In your LDAP user federation provider, add this mapper and set:
 - `LDAP Attributes Regex`: regex evaluated against all LDAP attributes in `attribute=value` lines.
 - `Keycloak Group Path`: target group path (example: `/employees/engineering`).
 - `Case-Insensitive Match`: `true` or `false`.
+- `Skip Disabled Users`: `true` or `false` (default `true`).
 
 ## Wiki
 
