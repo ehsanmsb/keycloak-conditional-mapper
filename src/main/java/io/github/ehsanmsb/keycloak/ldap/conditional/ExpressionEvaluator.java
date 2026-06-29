@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.jboss.logging.Logger;
+import org.keycloak.storage.ldap.idm.model.LDAPDn;
 import org.keycloak.storage.ldap.idm.model.LDAPObject;
 
 public final class ExpressionEvaluator {
@@ -50,15 +51,25 @@ public final class ExpressionEvaluator {
     }
 
     static String buildAttributesPayload(LDAPObject ldapUser) {
+        StringBuilder payload = new StringBuilder();
+
+        // Include LDAP_ENTRY_DN (the Distinguished Name) if available
+        LDAPDn ldapDn = ldapUser.getDn();
+        if (ldapDn != null) {
+            String dn = ldapDn.toString();
+            if (!dn.isEmpty()) {
+                payload.append("LDAP_ENTRY_DN=").append(dn).append('\n');
+            }
+        }
+
         Map<String, Set<String>> attributes = ldapUser.getAttributes();
         if (attributes == null || attributes.isEmpty()) {
-            return "";
+            return payload.toString();
         }
 
         List<String> names = new ArrayList<>(attributes.keySet());
         Collections.sort(names);
 
-        StringBuilder payload = new StringBuilder();
         for (String name : names) {
             Collection<String> rawValues = attributes.get(name);
             if (rawValues == null || rawValues.isEmpty()) {
