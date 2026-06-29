@@ -185,3 +185,63 @@ uid: user15
 mail: user15@gmail.com
 userPassword: pass15
 departmentNumber: support
+
+dn: uid=user16,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 16
+sn: User16
+uid: user16
+mail: user16@gmail.com
+userPassword: pass16
+departmentNumber: engineering
+
+dn: uid=user17,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 17
+sn: User17
+uid: user17
+mail: user17@yahoo.com
+userPassword: pass17
+departmentNumber: sales
+
+dn: uid=user18,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 18
+sn: User18
+uid: user18
+mail: user18@outlook.com
+userPassword: pass18
+departmentNumber: hr
+
+dn: uid=user19,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 19
+sn: User19
+uid: user19
+mail: user19@company.local
+userPassword: pass19
+departmentNumber: finance
+
+dn: uid=user20,ou=company,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: User 20
+sn: User20
+uid: user20
+mail: user20@gmail.com
+userPassword: pass20
+departmentNumber: support
