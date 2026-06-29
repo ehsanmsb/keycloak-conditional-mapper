@@ -98,6 +98,26 @@ Match any `memberOf` value:
 memberOf=cn=dev,ou=groups,dc=example,dc=com
 ```
 
+## Special attributes
+
+### LDAP_ENTRY_DN
+
+The Distinguished Name (DN) of the LDAP entry is automatically included in the payload as `LDAP_ENTRY_DN`:
+
+```text
+cn=John Doe
+LDAP_ENTRY_DN=uid=jdoe,ou=users,dc=example,dc=com
+departmentNumber=engineering
+mail=john.doe@example.com
+title=Senior Engineer
+```
+
+You can use this in your regex to match users based on their DN structure:
+
+```regex
+LDAP_ENTRY_DN=ou=engineering,dc=example,dc=com
+```
+
 ## Practical recipes
 
 - User must be in engineering and senior:
