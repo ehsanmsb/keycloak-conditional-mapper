@@ -31,7 +31,7 @@
       {
         "assets": [
           {
-            "path": "target/keycloak-conditional-mapper-v*.jar",
+            "path": "target/keycloak-conditional-mapper-*.jar",
             "label": "Keycloak Conditional Mapper JAR"
           }
         ]
