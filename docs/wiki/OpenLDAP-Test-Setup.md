@@ -68,9 +68,9 @@ Then click `Synchronize all users`.
 
 ## 5. Configure this conditional mapper plugin
 
-Add mapper `keycloak-conditional-mapper` and set:
+Expose `departmentNumber` to Keycloak with a read-only User Attribute LDAP Mapper if it is not already mapped. Then add mapper `keycloak-conditional-mapper` and set:
 
-- `LDAP Attributes Regex`: for example `departmentNumber=engineering`
+- `LDAP Attributes Regex`: for example `(?m)^departmentNumber=engineering$`
 - `Keycloak Group Path`: for example `/engineering`
 - `Case-Insensitive Match`: `true`
 

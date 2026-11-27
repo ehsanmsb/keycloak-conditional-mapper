@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.jboss.logging.Logger;
@@ -13,6 +14,9 @@ import org.keycloak.storage.ldap.idm.model.LDAPDn;
 import org.keycloak.storage.ldap.idm.model.LDAPObject;
 
 public final class ExpressionEvaluator {
+
+    private static final Pattern LINE_BREAKS = Pattern.compile("\\R");
+    private static final String ESCAPED_LINE_BREAK = Matcher.quoteReplacement("\\n");
 
     private ExpressionEvaluator() {
         throw new IllegalStateException("Utility class");
@@ -58,7 +62,7 @@ public final class ExpressionEvaluator {
         if (ldapDn != null) {
             String dn = ldapDn.toString();
             if (!dn.isEmpty()) {
-                payload.append("LDAP_ENTRY_DN=").append(dn).append('\n');
+                appendAttribute(payload, "LDAP_ENTRY_DN", dn);
             }
         }
 
@@ -73,16 +77,22 @@ public final class ExpressionEvaluator {
         for (String name : names) {
             Collection<String> rawValues = attributes.get(name);
             if (rawValues == null || rawValues.isEmpty()) {
-                payload.append(name).append("=\n");
+                appendAttribute(payload, name, "");
                 continue;
             }
 
             List<String> values = new ArrayList<>(rawValues);
             Collections.sort(values);
             for (String value : values) {
-                payload.append(name).append("=").append(value == null ? "" : value).append('\n');
+                appendAttribute(payload, name, value);
             }
         }
         return payload.toString();
+    }
+
+    private static void appendAttribute(StringBuilder payload, String name, String value) {
+        // Preserve the line boundary between attributes even when a value contains line breaks.
+        String singleLine = value == null ? "" : LINE_BREAKS.matcher(value).replaceAll(ESCAPED_LINE_BREAK);
+        payload.append(name).append('=').append(singleLine).append('\n');
     }
 }

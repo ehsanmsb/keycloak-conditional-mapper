@@ -46,7 +46,7 @@ public class LdapConditionalMapperFactory extends AbstractLDAPStorageMapperFacto
         ldapAttributesRegex.setHelpText(
             "Regex evaluated against normalized LDAP attributes in 'attribute=value' lines. "
                 + "Use OR with '|' and AND with lookaheads, for example: "
-                + "(?s)(?=.*departmentNumber=engineering)(?=.*title=senior).*"
+                + "(?m)\\A(?=.*^departmentNumber=engineering$)(?=.*^title=senior$).*"
         );
         properties.add(ldapAttributesRegex);
 
