@@ -73,6 +73,7 @@ jobs:
           node-version: "22"
 
       - name: Install semantic-release
+        # Preset v10 requires writer v9. The current release notes generator uses writer v8.
         run: |
           npm install --no-save \
             semantic-release \
@@ -81,7 +82,7 @@ jobs:
             @semantic-release/exec \
             @semantic-release/changelog \
             @semantic-release/github \
-            conventional-changelog-conventionalcommits
+            conventional-changelog-conventionalcommits@9.3.1
 
       - name: Release
         env:
