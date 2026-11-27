@@ -5,7 +5,7 @@ This page explains how to write the value for the **`LDAP Attributes Regex`** fi
 ## How matching works
 
 - The mapper builds one text payload from all LDAP attributes.
-- Each attribute value becomes one line in this format:
+- Each attribute value becomes one line. Line breaks in values are represented by the literal text `\n`. The format is:
 
 ```text
 attributeName=value
@@ -30,32 +30,32 @@ title=Senior Engineer
 - Match a single attribute/value:
 
 ```regex
-departmentNumber=engineering
+(?m)^departmentNumber=engineering$
 ```
 
 - OR condition:
 
 ```regex
-departmentNumber=engineering|departmentNumber=marketing
+(?m)^(?:departmentNumber=engineering|departmentNumber=marketing)$
 ```
 
 - AND condition (lookaheads):
 
 ```regex
-(?=.*departmentNumber=engineering)(?=.*title=Senior Engineer).*
+(?m)\A(?=.*^departmentNumber=engineering$)(?=.*^title=Senior Engineer$).*
 ```
 
 - AND + OR:
 
 ```regex
-(?=.*(departmentNumber=engineering|departmentNumber=platform))(?=.*title=Senior Engineer).*
+(?m)\A(?=.*^(?:departmentNumber=engineering|departmentNumber=platform)$)(?=.*^title=Senior Engineer$).*
 ```
 
 ## Exact line matching
 
 Because the matcher uses `find()`, plain patterns match anywhere in the payload.
 
-If you need to match a full line exactly, use multiline anchors:
+For access rules, use LDAP attributes that users cannot modify and match complete lines with multiline anchors:
 
 ```regex
 (?m)^departmentNumber=engineering$
@@ -72,13 +72,13 @@ Regex characters must be escaped when you want literal text.
 - Literal dot in value:
 
 ```regex
-mail=.*@example\.com
+(?m)^mail=[^\r\n]*@example\.com$
 ```
 
 - Literal parentheses:
 
 ```regex
-description=Team \(Platform\)
+(?m)^description=Team \(Platform\)$
 ```
 
 Common regex special characters: `. ^ $ * + ? ( ) [ ] { } | \`
@@ -95,7 +95,7 @@ memberOf=cn=ops,ou=groups,dc=example,dc=com
 Match any `memberOf` value:
 
 ```regex
-memberOf=cn=dev,ou=groups,dc=example,dc=com
+(?m)^memberOf=cn=dev,ou=groups,dc=example,dc=com$
 ```
 
 ## Special attributes
@@ -115,7 +115,7 @@ title=Senior Engineer
 You can use this in your regex to match users based on their DN structure:
 
 ```regex
-LDAP_ENTRY_DN=ou=engineering,dc=example,dc=com
+(?m)^LDAP_ENTRY_DN=[^\r\n]*,ou=engineering,dc=example,dc=com$
 ```
 
 ## Practical recipes
@@ -123,19 +123,19 @@ LDAP_ENTRY_DN=ou=engineering,dc=example,dc=com
 - User must be in engineering and senior:
 
 ```regex
-(?=.*departmentNumber=engineering)(?=.*title=senior).*
+(?m)\A(?=.*^departmentNumber=engineering$)(?=.*^title=senior$).*
 ```
 
 - User in engineering or marketing, and located in berlin:
 
 ```regex
-(?=.*(departmentNumber=engineering|departmentNumber=marketing))(?=.*l=berlin).*
+(?m)\A(?=.*^(?:departmentNumber=engineering|departmentNumber=marketing)$)(?=.*^l=berlin$).*
 ```
 
 - Match group DN safely (commas are literal, no escape needed):
 
 ```regex
-memberOf=cn=platform,ou=groups,dc=example,dc=com
+(?m)^memberOf=cn=platform,ou=groups,dc=example,dc=com$
 ```
 
 ## Troubleshooting
@@ -149,7 +149,7 @@ memberOf=cn=platform,ou=groups,dc=example,dc=com
   - Validate your regex syntax with Java regex rules.
 - Unexpected broad matches:
   - Remember `find()` matches any substring.
-  - Use anchors or lookaheads for stricter logic.
+  - Use multiline anchors for exact attributes and values. In values, use `[^\r\n]*` for a wildcard that stays on the same line.
 
 ## Reference behavior in this project
 

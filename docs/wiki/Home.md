@@ -10,7 +10,8 @@ This plugin adds imported LDAP users to a Keycloak group when both conditions ma
 
 | Mapper Version | Supported Keycloak Version | Status |
 | --- | --- | --- |
-| `v1.0.0` | `26.4.5` | Supported |
+| Current source | `26.8.2` | Target |
+| `v1.2.2` | `26.4.5` | Previous target |
 
 ## Quick start
 
